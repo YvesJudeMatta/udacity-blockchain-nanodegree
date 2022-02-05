@@ -8,7 +8,6 @@
  *
  */
 
-const SHA256 = require('crypto-js/sha256');
 const BlockClass = require('./block.js');
 const bitcoinMessage = require('bitcoinjs-message');
 
@@ -250,7 +249,6 @@ class Blockchain {
         }
         resolve(errorLog);
       } catch (err) {
-          console.log('err', err)
         return reject(err);
       }
     });
@@ -261,9 +259,9 @@ class Blockchain {
     if (!block) {
       return block;
     }
-    console.log('block', block)
+    console.log('block', block);
     block.hash = '123' + height;
-    console.log('block2', block)
+    console.log('block2', block);
     return block;
   }
 }
