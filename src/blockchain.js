@@ -263,9 +263,7 @@ class Blockchain {
     if (!block) {
       return block;
     }
-    console.log('block', block);
     block.hash = '123' + height;
-    console.log('block2', block);
     return block;
   }
 }
