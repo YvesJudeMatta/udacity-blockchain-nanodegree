@@ -7,7 +7,7 @@
  *  isn't a persisten storage method.
  *
  */
-
+const moment = require('moment');
 const BlockClass = require('./block.js');
 const bitcoinMessage = require('bitcoinjs-message');
 
@@ -50,7 +50,7 @@ class Blockchain {
   }
 
   _generateNewTime() {
-    return new Date().getTime().toString().slice(0, -3);
+    return new Date().getTime().toString();
   }
 
   /**
@@ -132,16 +132,13 @@ class Blockchain {
       try {
         // Get the item from the message sent as a parameter
         const messageTime = parseInt(message.split(':')[1]);
-        const messageTimeSeconds = messageTime / 1000;
-
-        // Get the current time
-        const currentTime = parseInt(self._generateNewTime());
-        const currentTimeSeconds = currentTime / 1000;
+        const mMessageTime = moment(messageTime);
+        const mToday = moment();
+        const elapsedTimeInSeconds = mToday.diff(mMessageTime, 'seconds');
 
         // Check if the time elapsed is less than 5 minutes
         // convert milliseconds to seconds
-        const elapsedTime = currentTimeSeconds - messageTimeSeconds;
-        if (elapsedTime >= FIVE_MINUTES_IN_SECONDS) {
+        if (elapsedTimeInSeconds >= FIVE_MINUTES_IN_SECONDS) {
           return reject(
             'Time elapsed between the message was sent and the current time must be less than 5 minutes'
           );
