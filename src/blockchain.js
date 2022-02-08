@@ -69,6 +69,10 @@ class Blockchain {
     let self = this;
     return new Promise(async (resolve, reject) => {
       try {
+        const errorLogs = await this.validateChain();
+        if (errorLogs?.length > 0) {
+          throw new Error('Blockchain is not valid');
+        }
         const blockHeight = self.height + 1;
         block.height = blockHeight;
         if (blockHeight > 0) {
