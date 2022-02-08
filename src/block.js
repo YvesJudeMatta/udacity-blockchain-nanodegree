@@ -37,18 +37,8 @@ class Block {
   validate() {
     let self = this;
     return new Promise((resolve, reject) => {
-      // Save in auxiliary variable the current block hash
-      const currentHash = self.hash;
-
-      // Recalculate the hash of the Block
-      // Comparing if the hashes changed
-      // Returning the Block is not valid
-      this.hash = null;
-      const generatedHash = self.generateNewHash();
-      this.hash = currentHash;
-
       // Returning the Block is valid or not
-      return resolve(generatedHash === currentHash);
+      return resolve(self.hash === self.generateNewHash());
     });
   }
 
@@ -75,8 +65,19 @@ class Block {
     throw new Error('This is the genesis block');
   }
 
+  /**
+   * Recalculate the hash of the Block.
+   * 
+   * 1. Create a new object
+   * 2. Spread this with `hash` set to null to avoid hashing with the hash included
+   * 3. JSON.stringy the created object
+   * 4. SHA256 the stringified object
+   * 5. Ensure it's a string by calling toString()
+   * 
+   * @returns string
+   */
   generateNewHash() {
-    return SHA256(JSON.stringify(this)).toString();
+    return SHA256(JSON.stringify({ ...this, hash: null })).toString();
   }
 }
 
